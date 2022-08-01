@@ -8,6 +8,6 @@ Within these two files, add:
 ```
 PGDATABASE=database_name
 ```
-Replace "database_name" with the respective database to connect to.
+Replace "database_name" with ```nc_news``` and ```nc_news_test``` in the correct file.
 
 Do not add ; to the end.

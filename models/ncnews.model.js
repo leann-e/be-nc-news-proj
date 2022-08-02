@@ -30,7 +30,7 @@ exports.updateArticle = (id, votes) => {
       [votes, id]
     )
     .then(({ rows }) => {
-      if (!rows) {
+      if (!rows[0]) {
         return Promise.reject({
           status: 404,
           msg: "error 404: not found.",

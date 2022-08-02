@@ -9,7 +9,7 @@ beforeEach(() => seed(testData));
 
 describe("GET", () => {
   describe("GET/api/topics", () => {
-    test("status: 200, responds with an array of topic objects, with a slug and description property", () => {
+    test("status: 200 - responds with an array of topic objects, with a slug and description property", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
@@ -82,13 +82,14 @@ describe("PATCH", () => {
     describe("error handling", () => {
       test("status: 404 - responds with not found if article_id doesn't exist", () => {
         return request(app)
-          .get("/api/articles/1000")
+          .patch("/api/articles/1000")
+          .send({ inc_votes: 1 })
           .expect(404)
           .then(({ body }) => {
             expect(body.msg).toBe("error 404: not found.");
           });
       });
-      test("status: 400 - should respond with bad request if article_id is invalid", () => {
+      test("status: 400 - responds with bad request if article_id is invalid", () => {
         return request(app)
           .patch("/api/articles/banana")
           .send({ inc_votes: 1 })
@@ -97,7 +98,7 @@ describe("PATCH", () => {
             expect(body.msg).toBe("error 400: bad request.");
           });
       });
-      test("status: 400 - should respond with bad request if inc_votes is not a number", () => {
+      test("status: 400 - responds with bad request if inc_votes is not a number", () => {
         return request(app)
           .patch("/api/articles/1")
           .send({ inc_votes: "banana" })
@@ -106,6 +107,23 @@ describe("PATCH", () => {
             expect(body.msg).toBe("error 400: bad request.");
           });
       });
+      // test("status: 200 - responds with the article unchanged if the sent request body is empty", () => {
+      //   return request(app)
+      //     .patch("/api/articles/1")
+      //     .send({})
+      //     .expect(200)
+      //     .then(({ body }) => {
+      //       expect(body.article).toEqual({
+      //         article_id: 1,
+      //         title: "Living in the shadow of a great man",
+      //         topic: "mitch",
+      //         author: "butter_bridge",
+      //         body: "I find this existence challenging",
+      //         created_at: expect.any(String),
+      //         votes: 100,
+      //       });
+      //     });
+      // });
     });
   });
 });

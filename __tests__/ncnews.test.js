@@ -2,6 +2,10 @@ const request = require("supertest");
 const app = require("../app");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
+const testData = require("../db/data/test-data");
+
+afterAll(() => db.end());
+beforeEach(() => seed(testData));
 
 describe("GET", () => {
   describe("GET/api/topics", () => {
@@ -15,12 +19,50 @@ describe("GET", () => {
           body.topics.forEach((topic) => {
             expect(topic).toEqual(
               expect.objectContaining({
-                topic_description: expect.any(String),
+                description: expect.any(String),
                 slug: expect.any(String),
               })
             );
           });
         });
+    });
+  });
+
+  describe("GET/api/articles/:article_id", () => {
+    test("status: 200, responds with the article object, with the following properties: author, title, article_id, body, topic, created_at and votes", () => {
+      return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.article).toEqual({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: expect.any(String),
+            votes: 100,
+          });
+        });
+    });
+
+    describe("error handling", () => {
+      test("status: 404 - responds with not found if article_id doesn't exist", () => {
+        return request(app)
+          .get("/api/articles/1000")
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("error 404: article_id not found");
+          });
+      });
+      test("status: 400 - responds with bad request if article_id is invalid", () => {
+        return request(app)
+          .get("/api/articles/banana")
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("error 400: article_id is invalid");
+          });
+      });
     });
   });
 });

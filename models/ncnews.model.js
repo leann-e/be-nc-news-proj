@@ -6,3 +6,17 @@ exports.fetchAllTopics = () => {
     return topics;
   });
 };
+
+exports.fetchArticleID = (id) => {
+  return db
+    .query("SELECT * FROM articles WHERE article_id = $1;", [id])
+    .then(({ rows: [article] }) => {
+      if (!article) {
+        return Promise.reject({
+          status: 404,
+          msg: "error 404: article_id not found",
+        });
+      }
+      return article;
+    });
+};

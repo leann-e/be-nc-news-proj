@@ -10,7 +10,10 @@ exports.fetchAllTopics = () => {
 
 exports.fetchArticleID = (id) => {
   return db
-    .query("SELECT * FROM articles WHERE article_id = $1;", [id])
+    .query(
+      "SELECT articles.author, articles.title, articles.article_id, articles.body, articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;",
+      [id]
+    )
     .then(({ rows: [article] }) => {
       if (!article) {
         return Promise.reject({

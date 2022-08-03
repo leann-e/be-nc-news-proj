@@ -22,7 +22,7 @@ exports.fetchArticleID = (id) => {
     });
 };
 
-exports.fetchAllUSers = () => {
+exports.fetchAllUsers = () => {
   return db.query("SELECT * FROM users;").then(({ rows: users }) => {
     return users;
   });

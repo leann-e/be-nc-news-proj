@@ -29,7 +29,7 @@ describe("GET", () => {
   });
 
   describe("GET/api/articles/:article_id", () => {
-    test("status: 200 - responds with the article object, with the following properties: author, title, article_id, body, topic, created_at and votes", () => {
+    test("status: 200 - responds with an article object for the correct article_id", () => {
       return request(app)
         .get("/api/articles/1")
         .expect(200)
@@ -42,7 +42,17 @@ describe("GET", () => {
             body: "I find this existence challenging",
             created_at: expect.any(String),
             votes: 100,
+            comment_count: 11,
           });
+        });
+    });
+
+    test("status: 200 - adds a comment_count key which has a value of the total number of comments for that specific article", () => {
+      return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.article.comment_count).toBe(11);
         });
     });
 

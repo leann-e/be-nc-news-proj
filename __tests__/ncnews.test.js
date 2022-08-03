@@ -65,6 +65,27 @@ describe("GET", () => {
       });
     });
   });
+
+  describe("GET/api/users", () => {
+    test("status: 200 - responds with an array of objects with username, name and avatar_url properties", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body }) => {
+          expect(Array.isArray(body.users)).toBe(true);
+          expect(body.users).toHaveLength(4);
+          body.users.forEach((user) => {
+            expect(user).toEqual(
+              expect.objectContaining({
+                username: expect.any(String),
+                name: expect.any(String),
+                avatar_url: expect.any(String),
+              })
+            );
+          });
+        });
+    });
+  });
 });
 
 describe("PATCH", () => {

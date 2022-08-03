@@ -22,6 +22,12 @@ exports.fetchArticleID = (id) => {
     });
 };
 
+exports.fetchAllUSers = () => {
+  return db.query("SELECT * FROM users;").then(({ rows: users }) => {
+    return users;
+  });
+};
+
 // PATCH
 exports.updateArticle = (id, votes) => {
   return db

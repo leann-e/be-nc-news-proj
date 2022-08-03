@@ -3,15 +3,20 @@ const {
   getAllTopics,
   getArticleID,
   patchArticle,
+  getAllUsers,
 } = require("./controllers/ncnews.controller");
 const app = express();
 
 app.use(express.json());
 
+// GET
 app.get("/api/topics", getAllTopics);
 
 app.get("/api/articles/:article_id", getArticleID);
 
+app.get("/api/users", getAllUsers);
+
+// PATCH
 app.patch("/api/articles/:article_id", patchArticle);
 
 ///////////////////////////////////////

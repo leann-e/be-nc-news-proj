@@ -157,7 +157,7 @@ describe("GET", () => {
     });
 
     describe("error handling", () => {
-      test("status: 400 - responds with bad request is article_id is invalid", () => {
+      test("status: 400 - responds with bad request if article_id is invalid", () => {
         return request(app)
           .get("/api/articles/banana/comments")
           .expect(400)
@@ -166,7 +166,7 @@ describe("GET", () => {
           });
       });
 
-      test("status: 404 - responds with not found if article_id doesnt exists", () => {
+      test("status: 404 - responds with not found if article_id doesnt exist", () => {
         return request(app)
           .get("/api/articles/1000/comments")
           .expect(404)
@@ -174,12 +174,12 @@ describe("GET", () => {
             expect(body.msg).toBe("error 404: not found.");
           });
       });
-      test("status: 404 - responds with not found if the article_id exists, but no comments are found", () => {
+      test("status: 200 - responds with an empty array if the article_id exists, but no comments are found", () => {
         return request(app)
           .get("/api/articles/2/comments")
-          .expect(404)
+          .expect(200)
           .then(({ body }) => {
-            expect(body.msg).toBe("error 404: not found.");
+            expect(body.comments).toEqual([]);
           });
       });
     });

@@ -11,7 +11,7 @@ exports.fetchAllTopics = () => {
 exports.fetchArticleID = (id) => {
   return db
     .query(
-      "SELECT articles.author, articles.title, articles.article_id, articles.body, articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;",
+      "SELECT users.username AS author, articles.title, articles.article_id, articles.body, articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id JOIN users ON users.username = articles.author WHERE articles.article_id = $1 GROUP BY articles.article_id, users.username;",
       [id]
     )
     .then(({ rows: [article] }) => {
@@ -29,6 +29,16 @@ exports.fetchAllUsers = () => {
   return db.query("SELECT * FROM users;").then(({ rows: users }) => {
     return users;
   });
+};
+
+exports.fetchAllArticles = () => {
+  return db
+    .query(
+      "SELECT users.username AS author, articles.title, articles.article_id, articles.body, articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id JOIN users ON users.username = articles.author GROUP BY articles.article_id, users.username ORDER BY created_at DESC;"
+    )
+    .then(({ rows: articles }) => {
+      return articles;
+    });
 };
 
 // PATCH

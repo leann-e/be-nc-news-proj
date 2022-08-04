@@ -3,6 +3,7 @@ const {
   fetchArticleID,
   updateArticle,
   fetchAllUsers,
+  fetchAllArticles,
 } = require("../models/ncnews.model");
 
 // GET
@@ -26,6 +27,12 @@ exports.getArticleID = (req, res, next) => {
 exports.getAllUsers = (req, res) => {
   fetchAllUsers().then((users) => {
     res.status(200).send({ users });
+  });
+};
+
+exports.getAllArticles = (req, res) => {
+  fetchAllArticles().then((articles) => {
+    res.status(200).send({ articles });
   });
 };
 

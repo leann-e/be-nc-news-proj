@@ -120,6 +120,18 @@ describe("GET", () => {
           });
         });
     });
+
+    test("status: 200 - should return the array of article objects sorted in descending order by date", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles.length).not.toBe(0);
+          expect(body.articles).toBeSortedBy("created_at", {
+            descending: true,
+          });
+        });
+    });
   });
 });
 

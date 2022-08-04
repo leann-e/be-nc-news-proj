@@ -4,6 +4,7 @@ const {
   updateArticle,
   fetchAllUsers,
   fetchAllArticles,
+  fetchAllComments,
 } = require("../models/ncnews.model");
 
 // GET
@@ -34,6 +35,17 @@ exports.getAllArticles = (req, res) => {
   fetchAllArticles().then((articles) => {
     res.status(200).send({ articles });
   });
+};
+
+exports.getAllComments = (req, res, next) => {
+  const { article_id } = req.params;
+  fetchAllComments(article_id)
+    .then((comments) => {
+      res.status(200).send({ comments });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 // PATCH

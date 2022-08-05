@@ -1,13 +1,14 @@
+const { convertTimestampToDate } = require("../db/seeds/utils");
 const {
   fetchAllTopics,
-  fetchArticleID,
+  fetchArticleByID,
   updateArticle,
   fetchAllUsers,
   fetchAllArticles,
   fetchAllComments,
   addComment,
 } = require("../models/ncnews.model");
-const { checkIfArticleExists } = require("../utils/utils");
+const { checkIfArticleExists, checkIfUserExists } = require("../utils/utils");
 
 // GET
 exports.getAllTopics = (req, res) => {
@@ -16,9 +17,9 @@ exports.getAllTopics = (req, res) => {
   });
 };
 
-exports.getArticleID = (req, res, next) => {
+exports.getArticleByID = (req, res, next) => {
   const { article_id } = req.params;
-  fetchArticleID(article_id)
+  fetchArticleByID(article_id)
     .then((article) => {
       res.status(200).send({ article });
     })
@@ -54,7 +55,7 @@ exports.getAllComments = (req, res, next) => {
 exports.postComment = (req, res, next) => {
   const { article_id } = req.params;
   const { username, body } = req.body;
-  fetchArticleID(article_id)
+  fetchArticleByID(article_id)
     .then(() => {
       return addComment(article_id, body, username);
     })

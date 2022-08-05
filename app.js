@@ -6,6 +6,7 @@ const {
   getAllUsers,
   getAllArticles,
   getAllComments,
+  postComment,
 } = require("./controllers/ncnews.controller");
 const app = express();
 
@@ -21,6 +22,9 @@ app.get("/api/users", getAllUsers);
 app.get("/api/articles", getAllArticles);
 
 app.get("/api/articles/:article_id/comments", getAllComments);
+
+// POST
+app.post("/api/articles/:article_id/comments", postComment);
 
 // PATCH
 app.patch("/api/articles/:article_id", patchArticle);

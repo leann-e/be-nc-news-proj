@@ -5,8 +5,9 @@ const {
   fetchAllUsers,
   fetchAllArticles,
   fetchAllComments,
-  checkIfArticleExists,
+  addComment,
 } = require("../models/ncnews.model");
+const { checkIfArticleExists } = require("../utils/utils");
 
 // GET
 exports.getAllTopics = (req, res) => {
@@ -43,6 +44,22 @@ exports.getAllComments = (req, res, next) => {
   Promise.all([fetchAllComments(article_id), checkIfArticleExists(article_id)])
     .then(([comments]) => {
       res.status(200).send({ comments });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+// POST
+exports.postComment = (req, res, next) => {
+  const { article_id } = req.params;
+  const { username, body } = req.body;
+  fetchArticleID(article_id)
+    .then(() => {
+      return addComment(article_id, body, username);
+    })
+    .then((comment) => {
+      res.status(201).send({ comment });
     })
     .catch((err) => {
       next(err);

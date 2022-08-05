@@ -49,18 +49,18 @@ exports.fetchAllComments = (id) => {
     });
 };
 
-exports.checkIfArticleExists = (id) => {
+//POST
+exports.addComment = (id, body, username) => {
   return db
-    .query("SELECT * FROM articles WHERE article_id = $1", [id])
-    .then(({ rows }) => {
-      if (rows.length === 0) {
-        return Promise.reject({
-          status: 404,
-          msg: "error 404: not found.",
-        });
-      }
+    .query(
+      "INSERT INTO comments (article_id, body, author) VALUES ($1, $2, $3) RETURNING *;",
+      [id, body, username]
+    )
+    .then(({ rows: comment }) => {
+      return comment[0];
     });
 };
+
 // PATCH
 exports.updateArticle = (id, votes) => {
   return db

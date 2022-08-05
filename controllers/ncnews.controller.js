@@ -1,12 +1,14 @@
+const { convertTimestampToDate } = require("../db/seeds/utils");
 const {
   fetchAllTopics,
-  fetchArticleID,
+  fetchArticleByID,
   updateArticle,
   fetchAllUsers,
   fetchAllArticles,
   fetchAllComments,
-  checkIfArticleExists,
+  addComment,
 } = require("../models/ncnews.model");
+const { checkIfArticleExists, checkIfUserExists } = require("../utils/utils");
 
 // GET
 exports.getAllTopics = (req, res) => {
@@ -15,9 +17,9 @@ exports.getAllTopics = (req, res) => {
   });
 };
 
-exports.getArticleID = (req, res, next) => {
+exports.getArticleByID = (req, res, next) => {
   const { article_id } = req.params;
-  fetchArticleID(article_id)
+  fetchArticleByID(article_id)
     .then((article) => {
       res.status(200).send({ article });
     })
@@ -43,6 +45,22 @@ exports.getAllComments = (req, res, next) => {
   Promise.all([fetchAllComments(article_id), checkIfArticleExists(article_id)])
     .then(([comments]) => {
       res.status(200).send({ comments });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+// POST
+exports.postComment = (req, res, next) => {
+  const { article_id } = req.params;
+  const { username, body } = req.body;
+  fetchArticleByID(article_id)
+    .then(() => {
+      return addComment(article_id, body, username);
+    })
+    .then((comment) => {
+      res.status(201).send({ comment });
     })
     .catch((err) => {
       next(err);

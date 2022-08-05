@@ -8,7 +8,7 @@ exports.fetchAllTopics = () => {
   });
 };
 
-exports.fetchArticleID = (id) => {
+exports.fetchArticleByID = (id) => {
   return db
     .query(
       "SELECT articles.author, articles.title, articles.article_id, articles.body, articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;",
@@ -49,18 +49,24 @@ exports.fetchAllComments = (id) => {
     });
 };
 
-exports.checkIfArticleExists = (id) => {
+//POST
+exports.addComment = (id, body, username) => {
+  if (!body || !username) {
+    return Promise.reject({
+      status: 400,
+      msg: "error 400: bad request.",
+    });
+  }
   return db
-    .query("SELECT * FROM articles WHERE article_id = $1", [id])
-    .then(({ rows }) => {
-      if (rows.length === 0) {
-        return Promise.reject({
-          status: 404,
-          msg: "error 404: not found.",
-        });
-      }
+    .query(
+      "INSERT INTO comments (article_id, body, author) VALUES ($1, $2, $3) RETURNING *;",
+      [id, body, username]
+    )
+    .then(({ rows: comment }) => {
+      return comment[0];
     });
 };
+
 // PATCH
 exports.updateArticle = (id, votes) => {
   return db

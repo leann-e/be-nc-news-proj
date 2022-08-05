@@ -186,6 +186,78 @@ describe("GET", () => {
   });
 });
 
+describe("POST", () => {
+  describe("POST/api/articles/:article_id/comments", () => {
+    test("status: 201 - should take an object with a username and body property, and respond with the posted comment", () => {
+      return request(app)
+        .post("/api/articles/3/comments")
+        .send({ username: "butter_bridge", body: "nice" })
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.comment).toEqual({
+            body: "nice",
+            votes: 0,
+            author: "butter_bridge",
+            article_id: 3,
+            comment_id: expect.any(Number),
+            created_at: expect.any(String),
+          });
+        });
+    });
+    describe("error handling", () => {
+      test("status: 400 - responds with bad request if article id invalid", () => {
+        return request(app)
+          .post("/api/articles/banana/comments")
+          .send({ username: "butter_bridge", body: "nice" })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("error 400: bad request.");
+          });
+      });
+
+      test("status: 400 - responds with bad request if body is missing", () => {
+        return request(app)
+          .post("/api/articles/3/comments")
+          .send({ username: "butter_bridge", body: "" })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("error 400: bad request.");
+          });
+      });
+
+      test("status: 400 - responds with bad request if username is missing", () => {
+        return request(app)
+          .post("/api/articles/3/comments")
+          .send({ username: "", body: "aaaaa" })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("error 400: bad request.");
+          });
+      });
+
+      test("status: 404 - responds with not found if article_id doesn't exist", () => {
+        return request(app)
+          .post("/api/articles/1000/comments")
+          .send({ username: "butter_bridge", body: "nice" })
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("error 404: not found.");
+          });
+      });
+
+      test("status: 404 - responds with not found if username doesn't exist", () => {
+        return request(app)
+          .post("/api/articles/3/comments")
+          .send({ username: "unknown", body: "hi" })
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("error 404: not found.");
+          });
+      });
+    });
+  });
+});
+
 describe("PATCH", () => {
   describe("PATCH/api/articles/:article_id", () => {
     test("status: 200 - should update the votes property by the specified amount and respond with the updated article", () => {

@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { checkIfTopicExists } = require("../utils/utils");
 const format = require("pg-format");
 
 // GET
@@ -31,14 +32,36 @@ exports.fetchAllUsers = () => {
   });
 };
 
-exports.fetchAllArticles = () => {
-  return db
-    .query(
-      "SELECT articles.author, articles.title, articles.article_id, articles.body, articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id GROUP BY articles.article_id ORDER BY created_at DESC;"
-    )
-    .then(({ rows: articles }) => {
-      return articles;
-    });
+exports.fetchAllArticles = (sort_by = "created at", order = "DESC", topic) => {
+  let query = `SELECT articles.author, articles.title, articles.article_id, articles.body, articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id `;
+
+  let injectArr = [];
+  if (topic) {
+    injectArr.push(topic);
+    query += `WHERE articles.topic = $1 `;
+  }
+
+  if (
+    ![
+      "articles.title",
+      "articles.votes",
+      "articles.created_at",
+      "articles.author",
+      "articles.comment_count",
+    ].includes(sort_by)
+  ) {
+    return Promise.reject({ status: 400, msg: "error 400: bad request." });
+  }
+
+  if (!["ASC", "DESC"].includes(order)) {
+    return Promise.reject({ status: 400, msg: "error 400: bad request." });
+  }
+
+  query += `GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`;
+
+  return db.query(query, injectArr).then(({ rows }) => {
+    return rows;
+  });
 };
 
 exports.fetchAllComments = (id) => {
@@ -84,3 +107,5 @@ exports.updateArticle = (id, votes) => {
       return rows[0];
     });
 };
+
+// DELETE

@@ -12,3 +12,16 @@ exports.checkIfArticleExists = (id) => {
       }
     });
 };
+
+exports.checkIfTopicExists = (slug) => {
+  return db
+    .query("SELECT * FROM topics WHERE slug = $1", [slug])
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "error 404: not found.",
+        });
+      }
+    });
+};

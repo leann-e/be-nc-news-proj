@@ -8,7 +8,7 @@ const {
   fetchAllComments,
   addComment,
 } = require("../models/ncnews.model");
-const { checkIfArticleExists, checkIfUserExists } = require("../utils/utils");
+const { checkIfArticleExists, checkIfTopicExists } = require("../utils/utils");
 
 // GET
 exports.getAllTopics = (req, res) => {
@@ -34,10 +34,18 @@ exports.getAllUsers = (req, res) => {
   });
 };
 
-exports.getAllArticles = (req, res) => {
-  fetchAllArticles().then((articles) => {
-    res.status(200).send({ articles });
-  });
+exports.getAllArticles = (req, res, next) => {
+  const { sort_by, order, topic } = req.query;
+  checkIfTopicExists(topic)
+    .then(() => {
+      return fetchAllArticles(sort_by, order, topic);
+    })
+    .then((articles) => {
+      res.status(200).send({ articles });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.getAllComments = (req, res, next) => {
@@ -79,3 +87,5 @@ exports.patchArticle = (req, res, next) => {
       next(err);
     });
 };
+
+// DELETE

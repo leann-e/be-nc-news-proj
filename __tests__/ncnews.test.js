@@ -132,6 +132,30 @@ describe("GET", () => {
           });
         });
     });
+
+    describe("GET/api/articles (queries)", () => {
+      test.only("status: 200 - accepts multiple queries", () => {
+        return request(app)
+          .get("/api/articles?sort_by=votes&order=ASC&topic=mitch")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles.length).not.toBe(0);
+            expect(body.articles).toBeSortedBy("votes", { ascending: true });
+            body.articles.forEach((article) => {
+              expect(article.topic).toBe("mitch");
+            });
+          });
+      });
+      //   test("status: 200 - accepts a sort_by query which sorts the articles by the default order (descending)", () => {
+      //     return request(app)
+      //       .get("/api/articles?sort_by=title")
+      //       .expect(200)
+      //       .then(({ body }) => {
+      //         expect(body.articles.length).not.toBe(0);
+      //         expect(body.articles).toBeSortedBy("title", { descending: true });
+      //       });
+      //   });
+    });
   });
 
   describe("GET/api/articles/:article_id/comments", () => {
@@ -316,5 +340,11 @@ describe("PATCH", () => {
       //     });
       // });
     });
+  });
+});
+
+describe("DELETE", () => {
+  describe("DELETE api/comments/:comment_id", () => {
+    test("status: 204 - should delete a comment when passed a valid comment id", () => {});
   });
 });

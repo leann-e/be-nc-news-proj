@@ -10,6 +10,7 @@ const {
   removeCommentById,
 } = require("../models/ncnews.model");
 const { checkIfArticleExists, checkIfTopicExists } = require("../utils/utils");
+const endpoints = require("../endpoints.json");
 
 // GET
 exports.getAllTopics = (req, res) => {
@@ -59,6 +60,10 @@ exports.getAllComments = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.getApi = (req, res) => {
+  res.status(200).send({ endpoints });
 };
 
 // POST

@@ -259,6 +259,18 @@ describe("GET", () => {
       });
     });
   });
+
+  describe("GET /api", () => {
+    test("status: 200 - responds with an object of all the available endpoints", () => {
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({ body }) => {
+          expect(Object.keys(body.endpoints).length).toBe(8);
+          expect(body).toHaveProperty("endpoints");
+        });
+    });
+  });
 });
 
 describe("POST", () => {

@@ -36,10 +36,11 @@ exports.getAllUsers = (req, res) => {
 
 exports.getAllArticles = (req, res, next) => {
   const { sort_by, order, topic } = req.query;
-  checkIfTopicExists(topic)
-    .then(() => {
-      return fetchAllArticles(sort_by, order, topic);
-    })
+  // console.log(sort_by, order, topic);
+  // checkIfTopicExists(topic)
+  //   .then(() => {
+  //     return
+  fetchAllArticles(sort_by, order, topic)
     .then((articles) => {
       res.status(200).send({ articles });
     })

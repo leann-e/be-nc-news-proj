@@ -97,7 +97,7 @@ describe("GET", () => {
     });
   });
 
-  describe("GET/api/articles", () => {
+  describe.only("GET/api/articles", () => {
     test("status: 200 - responds with an article array of article objects sorted in descending order by date, with all the respective properties", () => {
       return request(app)
         .get("/api/articles")
@@ -126,7 +126,7 @@ describe("GET", () => {
         .get("/api/articles")
         .expect(200)
         .then(({ body }) => {
-          expect(body.articles.length).not.toBe(0);
+          expect(body.articles.length).toBe(12);
           expect(body.articles).toBeSortedBy("created_at", {
             descending: true,
           });
@@ -134,27 +134,78 @@ describe("GET", () => {
     });
 
     describe("GET/api/articles (queries)", () => {
-      test.only("status: 200 - accepts multiple queries", () => {
+      test("status: 200 - accepts multiple queries", () => {
         return request(app)
           .get("/api/articles?sort_by=votes&order=ASC&topic=mitch")
           .expect(200)
           .then(({ body }) => {
-            expect(body.articles.length).not.toBe(0);
+            expect(body.articles.length).toBe(11);
             expect(body.articles).toBeSortedBy("votes", { ascending: true });
             body.articles.forEach((article) => {
               expect(article.topic).toBe("mitch");
             });
           });
       });
-      //   test("status: 200 - accepts a sort_by query which sorts the articles by the default order (descending)", () => {
-      //     return request(app)
-      //       .get("/api/articles?sort_by=title")
-      //       .expect(200)
-      //       .then(({ body }) => {
-      //         expect(body.articles.length).not.toBe(0);
-      //         expect(body.articles).toBeSortedBy("title", { descending: true });
-      //       });
-      //   });
+      test("status: 200 - accepts a sort_by query which sorts the articles by the default order (descending)", () => {
+        return request(app)
+          .get("/api/articles?sort_by=title")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles.length).toBe(12);
+            expect(body.articles).toBeSortedBy("title", { descending: true });
+          });
+      });
+
+      test("status: 200 - accepts a topic query which sorts the articles by the default order (descending)", () => {
+        return request(app)
+          .get("/api/articles?topic=cats")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles.length).toBe(1);
+            expect(body.articles).toBeSortedBy("cat", { descending: true });
+          });
+      });
+
+      test("status: 200 - accepts a order query which sorts the articles by asc/desc", () => {
+        return request(app)
+          .get("/api/articles?order=ASC")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles.length).toBe(12);
+            expect(body.articles).toBeSortedBy("created_at", {
+              ascending: true,
+            });
+          });
+      });
+    });
+
+    describe("error handling", () => {
+      test("status: 400 - responds with bad request if sort_by query is invalid", () => {
+        return request(app)
+          .get("/api/articles?sort_by=invalid")
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("error 400: bad request.");
+          });
+      });
+
+      test("status: 400 - responds with bad request if order query is invalid", () => {
+        return request(app)
+          .get("/api/articles?order=invalid")
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("error 400: bad request.");
+          });
+      });
+
+      test("status: 404 - responds with not found if topic query doesn't exist", () => {
+        return request(app)
+          .get("/api/articles?topic=nonexistant")
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("error 404: not found.");
+          });
+      });
     });
   });
 

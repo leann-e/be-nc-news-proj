@@ -7,6 +7,7 @@ const {
   getAllArticles,
   getAllComments,
   postComment,
+  deleteCommentById,
 } = require("./controllers/ncnews.controller");
 const app = express();
 
@@ -28,6 +29,9 @@ app.post("/api/articles/:article_id/comments", postComment);
 
 // PATCH
 app.patch("/api/articles/:article_id", patchArticle);
+
+// DELETE
+app.delete("/api/comments/:comment_id", deleteCommentById);
 
 ///////////////////////////////////////
 

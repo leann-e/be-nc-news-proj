@@ -97,7 +97,7 @@ describe("GET", () => {
     });
   });
 
-  describe.only("GET/api/articles", () => {
+  describe("GET/api/articles", () => {
     test("status: 200 - responds with an article array of article objects sorted in descending order by date, with all the respective properties", () => {
       return request(app)
         .get("/api/articles")
@@ -395,7 +395,34 @@ describe("PATCH", () => {
 });
 
 describe("DELETE", () => {
-  describe("DELETE api/comments/:comment_id", () => {
-    test("status: 204 - should delete a comment when passed a valid comment id", () => {});
+  describe.only("DELETE api/comments/:comment_id", () => {
+    test("status: 204 - should delete a comment when passed a valid comment id", () => {
+      return request(app)
+        .delete("/api/comments/1")
+        .expect(204)
+        .then(({ body }) => {
+          expect(body).toEqual({});
+        });
+    });
+
+    describe("error handling", () => {
+      test("status: 400 - responds with bad requst if comment_id is invalid", () => {
+        return request(app)
+          .delete("/api/comments/invalid")
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("error 400: bad request.");
+          });
+      });
+
+      test("status: 404 - responds with not found if comment_id doesn't exist", () => {
+        return request(app)
+          .delete("/api/comments/999")
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("error 404: not found.");
+          });
+      });
+    });
   });
 });

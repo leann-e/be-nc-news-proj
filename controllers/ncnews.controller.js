@@ -7,6 +7,7 @@ const {
   fetchAllArticles,
   fetchAllComments,
   addComment,
+  removeCommentById,
 } = require("../models/ncnews.model");
 const { checkIfArticleExists, checkIfTopicExists } = require("../utils/utils");
 
@@ -90,3 +91,13 @@ exports.patchArticle = (req, res, next) => {
 };
 
 // DELETE
+exports.deleteCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+  removeCommentById(comment_id)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch((err) => {
+      next(err);
+    });
+};

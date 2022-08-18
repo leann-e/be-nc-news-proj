@@ -395,7 +395,7 @@ describe("PATCH", () => {
 });
 
 describe("DELETE", () => {
-  describe.only("DELETE api/comments/:comment_id", () => {
+  describe("DELETE api/comments/:comment_id", () => {
     test("status: 204 - should delete a comment when passed a valid comment id", () => {
       return request(app)
         .delete("/api/comments/1")

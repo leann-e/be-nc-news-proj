@@ -10,8 +10,10 @@ const {
   deleteCommentById,
   getApi,
 } = require("./controllers/ncnews.controller");
+const cors = require("cors");
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 // GET
@@ -25,7 +27,7 @@ app.get("/api/articles", getAllArticles);
 
 app.get("/api/articles/:article_id/comments", getAllComments);
 
-app.get("/api", getApi);
+app.get("/", getApi);
 
 // POST
 app.post("/api/articles/:article_id/comments", postComment);

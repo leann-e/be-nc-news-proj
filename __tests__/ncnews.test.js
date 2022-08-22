@@ -260,7 +260,7 @@ describe("GET", () => {
     });
   });
 
-  describe("GET /api", () => {
+  describe.only("GET /api", () => {
     test("status: 200 - responds with an object of all the available endpoints", () => {
       return request(app)
         .get("/api")

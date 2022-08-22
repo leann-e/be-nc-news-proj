@@ -8,6 +8,7 @@ const {
   fetchAllComments,
   addComment,
   removeCommentById,
+  fetchApi,
 } = require("../models/ncnews.model");
 const { checkIfArticleExists, checkIfTopicExists } = require("../utils/utils");
 const endpoints = require("../endpoints.json");
@@ -62,8 +63,14 @@ exports.getAllComments = (req, res, next) => {
     });
 };
 
-exports.getApi = (req, res) => {
-  res.status(200).send({ endpoints });
+exports.getApi = (req, res, next) => {
+  fetchApi()
+    .then(() => {
+      res.status(200).send({ endpoints });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 // POST

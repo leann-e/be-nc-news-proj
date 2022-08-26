@@ -167,6 +167,17 @@ describe("GET", () => {
           });
       });
 
+      test.only("status: 200 - accepts a sort_by query which sorts the articles by the default order (descending)", () => {
+        return request(app)
+          .get("/api/articles?sort_by=comment_count&order=DESC")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles).toBeSortedBy("comment_count", {
+              descending: true,
+            });
+          });
+      });
+
       test("status: 200 - accepts a topic query which sorts the articles by the default order (descending)", () => {
         return request(app)
           .get("/api/articles?topic=cats")

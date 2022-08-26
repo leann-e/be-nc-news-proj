@@ -53,7 +53,7 @@ exports.fetchAllArticles = (sort_by = "created_at", order = "DESC", topic) => {
     return Promise.reject({ status: 400, msg: "error 400: bad request." });
   }
 
-  query += `GROUP BY articles.article_id ORDER BY articles.${sort_by} ${order}`;
+  query += `GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`;
 
   return db.query(query, topicQuery).then(({ rows }) => {
     return rows;

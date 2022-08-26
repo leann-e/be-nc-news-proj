@@ -156,6 +156,17 @@ describe("GET", () => {
           });
       });
 
+      test("status: 200 - accepts a sort_by query which sorts the articles by the default order (descending)", () => {
+        return request(app)
+          .get("/api/articles?sort_by=comment_count")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles).toBeSortedBy("comment_count", {
+              descending: true,
+            });
+          });
+      });
+
       test("status: 200 - accepts a topic query which sorts the articles by the default order (descending)", () => {
         return request(app)
           .get("/api/articles?topic=cats")
@@ -198,7 +209,7 @@ describe("GET", () => {
           });
       });
 
-      test("status: 404 - responds with not found if topic query doesn't exist", () => {
+      test.skip("status: 404 - responds with not found if topic query doesn't exist", () => {
         return request(app)
           .get("/api/articles?topic=nonexistant")
           .expect(404)
@@ -260,7 +271,7 @@ describe("GET", () => {
     });
   });
 
-  describe.only("GET /api", () => {
+  describe.skip("GET /api", () => {
     test("status: 200 - responds with an object of all the available endpoints", () => {
       return request(app)
         .get("/api")

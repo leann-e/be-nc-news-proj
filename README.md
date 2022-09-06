@@ -8,7 +8,7 @@ It is written in JavaScript, with a backend that utilites Node.js, Express and P
 
 ## API
 
-A full list of the available endpoints is available [here](https://nc-news-leanne.herokuapp.com/api)
+A full list of the available endpoints is available [here](https://nc-news-leanne.herokuapp.com/api).
 
 ## Hosted
 
@@ -29,7 +29,7 @@ PGDATABASE=database_name
 Replace "database_name" with `nc_news` and `nc_news_test` in the correct file.
 Do not add ; to the end.
 
-4. Run `npm run setup-dbs`. This creates two databases for development and testing.
+4. Run `npm run setup-dbs`. This creates two databases: one for development and one for testing.
 
 5. Run `npm run seed` to seed the development database.
 
@@ -37,8 +37,8 @@ Do not add ; to the end.
 
 7. Run `npm test` to run the entire test suite, **or** run `npm test <file_path>` to run a specific testing file.
 
-8. Run `npm run seed:prod` for Heroku deployment. This will seed the production database.
+8. Run `npm run seed:prod` for Heroku deployment.
 
 ## Versions
 
-This project was completed using `Node.js` v18.3.0 and `Postgres` v14.5
+This project was completed using `Node.js v18.3.0` and `Postgres v14.5`.

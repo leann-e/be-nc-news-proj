@@ -167,7 +167,7 @@ describe("GET", () => {
           });
       });
 
-      test.only("status: 200 - accepts a sort_by query which sorts the articles by the default order (descending)", () => {
+      test("status: 200 - accepts a sort_by query which sorts the articles by the default order (descending)", () => {
         return request(app)
           .get("/api/articles?sort_by=comment_count&order=DESC")
           .expect(200)
@@ -217,15 +217,6 @@ describe("GET", () => {
           .expect(400)
           .then(({ body }) => {
             expect(body.msg).toBe("error 400: bad request.");
-          });
-      });
-
-      test.skip("status: 404 - responds with not found if topic query doesn't exist", () => {
-        return request(app)
-          .get("/api/articles?topic=nonexistant")
-          .expect(404)
-          .then(({ body }) => {
-            expect(body.msg).toBe("error 404: not found.");
           });
       });
     });
@@ -282,14 +273,14 @@ describe("GET", () => {
     });
   });
 
-  describe.skip("GET /api", () => {
+  describe("GET/api", () => {
     test("status: 200 - responds with an object of all the available endpoints", () => {
       return request(app)
         .get("/api")
         .expect(200)
         .then(({ body }) => {
-          expect(Object.keys(body.endpoints).length).toBe(8);
           expect(body).toHaveProperty("endpoints");
+          expect(Object.keys(body.endpoints).length).toBe(9);
         });
     });
   });
@@ -407,23 +398,6 @@ describe("PATCH", () => {
             expect(body.msg).toBe("error 400: bad request.");
           });
       });
-      // test("status: 200 - responds with the article unchanged if the sent request body is empty", () => {
-      //   return request(app)
-      //     .patch("/api/articles/1")
-      //     .send({})
-      //     .expect(200)
-      //     .then(({ body }) => {
-      //       expect(body.article).toEqual({
-      //         article_id: 1,
-      //         title: "Living in the shadow of a great man",
-      //         topic: "mitch",
-      //         author: "butter_bridge",
-      //         body: "I find this existence challenging",
-      //         created_at: expect.any(String),
-      //         votes: 100,
-      //       });
-      //     });
-      // });
     });
   });
 });

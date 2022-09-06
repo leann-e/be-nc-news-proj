@@ -1,16 +1,16 @@
 {
   "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
+    "description": "provides a json representation of all the available endpoints of the api"
   },
   "GET /api/topics": {
-    "description": "serves an array of all topics",
+    "description": "provides an array of all topics",
     "queries": [],
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all topics",
+    "description": "provides an array of all topics",
     "queries": ["topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
@@ -28,7 +28,7 @@
     }
   },
   "GET /api/articles/:article_id": {
-    "description": "serves a single article object based on the article_id given",
+    "description": "provides a single article object based on the article_id given",
     "queries": [],
     "exampleResponse": {
       "article": {
@@ -44,7 +44,7 @@
     }
   },
   "GET /api/users": {
-    "description": "serves an array of all the users",
+    "description": "provides an array of all the users",
     "queries": [],
     "exampleResponse": {
       "users": [
@@ -55,6 +55,19 @@
         }
       ]
     }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "provides an array of all the comments for an article based on a given article_id",
+    "queries": [],
+    "exampleResponse": [
+      {
+        "comment_id": 1,
+        "votes": 10,
+        "created_at": 1594329060000,
+        "author": "jonny",
+        "body": "nice article!"
+      }
+    ]
   },
   "POST /api/articles/:article_id/comments": {
     "description": "adds a new comment to an existing article based on article_id",

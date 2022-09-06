@@ -68,13 +68,6 @@ exports.fetchAllComments = (id) => {
     });
 };
 
-exports.fetchApi = () => {
-  return fs.readFile(`${__dirname}/../endpoints.json`, "utf-8").then((data) => {
-    const parsedData = JSON.parse(data);
-    return parsedData;
-  });
-};
-
 //POST
 exports.addComment = (id, body, username) => {
   if (!body || !username) {

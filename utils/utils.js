@@ -23,9 +23,5 @@ exports.checkIfTopicExists = (slug) => {
           msg: "error 404: not found.",
         });
       }
-      //   return rows ? true : false;
-      // })
-      // .catch((err) => {
-      //   return Promise.reject(err);
     });
 };

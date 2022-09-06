@@ -1,4 +1,3 @@
-const { convertTimestampToDate } = require("../db/seeds/utils");
 const {
   fetchAllTopics,
   fetchArticleByID,
@@ -8,9 +7,8 @@ const {
   fetchAllComments,
   addComment,
   removeCommentById,
-  fetchApi,
 } = require("../models/ncnews.model");
-const { checkIfArticleExists, checkIfTopicExists } = require("../utils/utils");
+const { checkIfArticleExists } = require("../utils/utils");
 const endpoints = require("../endpoints.json");
 
 // GET
@@ -39,10 +37,6 @@ exports.getAllUsers = (req, res) => {
 
 exports.getAllArticles = (req, res, next) => {
   const { sort_by, order, topic } = req.query;
-  // console.log(sort_by, order, topic);
-  // checkIfTopicExists(topic)
-  //   .then(() => {
-  //     return
   fetchAllArticles(sort_by, order, topic)
     .then((articles) => {
       res.status(200).send({ articles });
@@ -64,13 +58,7 @@ exports.getAllComments = (req, res, next) => {
 };
 
 exports.getApi = (req, res, next) => {
-  fetchApi()
-    .then(() => {
-      res.status(200).send({ endpoints });
-    })
-    .catch((err) => {
-      next(err);
-    });
+  res.status(200).send({ endpoints });
 };
 
 // POST

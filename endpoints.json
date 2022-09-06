@@ -1,16 +1,16 @@
 {
   "GET /api": {
-    "description": "provides a json representation of all the available endpoints of the api"
+    "description": "serves a json representation of all the available endpoints of the api"
   },
   "GET /api/topics": {
-    "description": "provides an array of all topics",
+    "description": "serves an array of all topics",
     "queries": [],
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
   "GET /api/articles": {
-    "description": "provides an array of all topics",
+    "description": "serves an array of all topics",
     "queries": ["topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
@@ -28,7 +28,7 @@
     }
   },
   "GET /api/articles/:article_id": {
-    "description": "provides a single article object based on the article_id given",
+    "description": "serves a single article object based on the article_id given",
     "queries": [],
     "exampleResponse": {
       "article": {
@@ -44,7 +44,7 @@
     }
   },
   "GET /api/users": {
-    "description": "provides an array of all the users",
+    "description": "serves an array of all the users",
     "queries": [],
     "exampleResponse": {
       "users": [
@@ -57,7 +57,7 @@
     }
   },
   "GET /api/articles/:article_id/comments": {
-    "description": "provides an array of all the comments for an article based on a given article_id",
+    "description": "serves an array of all the comments for an article based on a given article_id",
     "queries": [],
     "exampleResponse": [
       {

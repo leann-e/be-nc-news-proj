@@ -6,13 +6,13 @@ This Northcoders News API is a solo backend project for the Northcoders Bootcamp
 
 It is written in JavaScript, with a backend that utilites Node.js, Express and PostgreSQL. Full TDD is included, which can be tested with Jest.
 
+## Hosted
+
+The hosted version of this project is available [here](https://nc-news-leanne.herokuapp.com/api).
+
 ## API
 
 A full list of the available endpoints is available [here](https://nc-news-leanne.herokuapp.com/api).
-
-## Hosted
-
-The hosted version of this project is available [here](https://nc-news-leanne.herokuapp.com/).
 
 ## Cloning the Repo
 

@@ -41,4 +41,4 @@ Do not add ; to the end.
 
 ## Versions
 
-This project was completed using `Node.js v18.3.0` and `Postgres v14.5`.
+This project was completed using Node.js v18.3.0 and Postgres v14.5.
